@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
-	"path/filepath"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 type TemplateCommand struct {
@@ -18,7 +18,7 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 	r := git.NewMemoryRepository()
 
 	err := r.Clone(&git.CloneOptions{
-		URL: cfg.Templates.Repo,
+		URL:          cfg.Templates.Repo,
 		SingleBranch: true,
 	})
 	CheckIfError(err)
@@ -36,7 +36,7 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 		abs := filepath.Join(TemplatesDir, f.Name)
 		dir := filepath.Dir(abs)
 
-		os.MkdirAll(dir, 0777)
+		os.MkdirAll(dir, os.ModePerm)
 
 		file, err := os.Create(abs)
 		if err != nil {
@@ -63,14 +63,8 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 	return nil
 }
 
-func (cmd *TemplateCommand) list(c *kingpin.ParseContext) error {
-	fmt.Println("Templates List!")
-	return nil
-}
-
 func ConfigureTemplateCommand(app *kingpin.Application) {
 	cmd := &TemplateCommand{}
-	template := app.Command("template", "Initialize project structure")
-	template.Command("install", "").Action(cmd.install)
-	template.Command("list", "").Action(cmd.list)
+	template := app.Command("template", "CV templates")
+	template.Command("install", "Install templates from config file").Action(cmd.install)
 }

@@ -14,3 +14,13 @@ social:
   linkedin: dmitry-ivanenko-a1412128
   medium: noxt
   twitter: dmitry_ivanenko
+
+languages:
+  - name: Русский
+    level:
+      value: 5
+      description: Нативный
+  - name: Английский
+    level:
+      value: 3
+      description: Прохожу интервью

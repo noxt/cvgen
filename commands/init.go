@@ -4,6 +4,12 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"os"
+)
+
+const (
+	DefaultTemplateRepo = "https://github.com/noxt/cvgen-templates"
+	DefaultTemplateName = "orbit"
 )
 
 type InitCommand struct {
@@ -17,15 +23,26 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 				Name: DefaultTemplateName,
 			},
 		},
-		AboutMeFileName: me{},
+		AboutMeFileName: me{
+			Languages: []language{
+				language{},
+			},
+		},
 		EducationFileName: []education{
 			education{},
 		},
 		OrganizationsFileName: []organization{
-			organization{},
+			organization{
+				Projects: []project{
+					project{},
+				},
+			},
 		},
 		ProjectsFileName: []project{
 			project{},
+		},
+		SkillsFileName: []skill{
+			skill{},
 		},
 	}
 
@@ -33,7 +50,7 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 		b, err := yaml.Marshal(model)
 		CheckIfError(err)
 
-		err = ioutil.WriteFile(file, b, 0755)
+		err = ioutil.WriteFile(file, b, os.ModePerm)
 		CheckIfError(err)
 	}
 

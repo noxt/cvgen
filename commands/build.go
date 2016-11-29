@@ -11,6 +11,8 @@ import (
 	"text/template"
 )
 
+const OutputDir = "output"
+
 type BuildCommand struct {
 }
 
@@ -28,6 +30,7 @@ func (info *userInfo) load() {
 		EducationFileName:     &info.Educations,
 		OrganizationsFileName: &info.Organizations,
 		ProjectsFileName:      &info.Projects,
+		SkillsFileName:        &info.Skills,
 	}
 
 	for file, model := range parsingMap {
@@ -48,7 +51,7 @@ func (info *userInfo) render() {
 	CheckIfError(err)
 
 	// TODO: Исправить копирование
-	c := exec.Command("/bin/sh", "-c", "cp -a " + path.Join(TemplatesDir, cfg.Templates.Name, "*") + " " + OutputDir)
+	c := exec.Command("/bin/sh", "-c", "cp -a "+path.Join(TemplatesDir, cfg.Templates.Name, "*")+" "+OutputDir)
 	err = c.Run()
 	CheckIfError(err)
 

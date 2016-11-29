@@ -6,16 +6,10 @@ const (
 	EducationFileName     = "education.yaml"
 	OrganizationsFileName = "organizations.yaml"
 	ProjectsFileName      = "projects.yaml"
+	SkillsFileName        = "skills.yaml"
 )
 
 const (
 	TemplatesDir     = "templates"
 	TemplateFileName = "index.html"
-)
-
-const OutputDir = "output"
-
-const (
-	DefaultTemplateRepo = "https://github.com/noxt/cvgen-templates"
-	DefaultTemplateName = "orbit"
 )

@@ -1,23 +1,9 @@
-- name: relax.by
-  link: https://itunes.apple.com/by/app/relax.by-gid-po-zavedeniam/id568029837?mt=8
-  categories: [iOS, Приложение, API]
-  role: Developer
-  description: Каталог заведений и Афиша
-  challenges:
-    - Кластеризация заведений на Google Maps
-    - Кастомный первый экран, который конфигурируется на стороне сервера
-    - Анимации при скроле
-    - Написание API для приложения
-  technologies: [Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP]
-  organization_id: artox_ios
+- name: DIDatepicker
+  link: https://github.com/noxt/DIDatepicker
+  description: Библиотека селектора дат
+  technologies: Objective-C
 
-- name: 103.by
-  link: https://itunes.apple.com/by/app/103.by-poisk-lekarstv/id702791018?mt=8
-  categories: [iOS, Приложение, API]
-  role: Developer
-  description: Поиск аптек с лекарствами
-  challenges:
-    - Анимации при скроле
-    - Написание API для приложения
-  technologies: [Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP]
-  organization_id: artox_ios
+- name: cvgen
+  link: https://github.com/noxt/cvgen
+  description: Генерация CV сайтов на основе YAML файлов
+  technologies: Go

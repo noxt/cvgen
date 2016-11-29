@@ -17,5 +17,4 @@ template:
 * `init` Setup config file
 * `template`
     * `install` Install templates from config file
-    * `list` List of installed templates
 * `build` Build CV site

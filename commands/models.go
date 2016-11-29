@@ -5,6 +5,7 @@ type userInfo struct {
 	Educations    []education
 	Organizations []organization
 	Projects      []project
+	Skills        []skill
 }
 
 type education struct {
@@ -20,6 +21,7 @@ type me struct {
 	Role        string
 	Social      social
 	Contacts    contacts
+	Languages   []language
 }
 
 type social struct {
@@ -37,22 +39,37 @@ type contacts struct {
 	City    string
 }
 
-type organization struct {
-	Id    string
+type language struct {
 	Name  string
-	Link  string
-	Role  string
-	Start string
-	End   string
+	Level languageLevel
+}
+
+type languageLevel struct {
+	Value       string
+	Description string
+}
+
+type organization struct {
+	Name        string
+	City        string
+	Link        string
+	Description string
+	Role        string
+	Start       string
+	End         string
+	Projects    []project
 }
 
 type project struct {
-	Name           string
-	Link           string
-	Role           string
-	Description    string
-	OrganizationId string `yaml:"organization_id"`
-	Categories     []string
-	Challenges     []string
-	Technologies   []string
+	Name         string
+	Link         string
+	Role         string
+	Description  string
+	Challenges   []string
+	Technologies string
+}
+
+type skill struct {
+	Name     string
+	Progress string
 }
