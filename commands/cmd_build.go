@@ -56,12 +56,7 @@ func (info *userInfo) load() {
 func (info *userInfo) copyTemplate() {
 	cfg := GetConfig()
 
-	err := os.MkdirAll(OutputDir, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = copyDir(path.Join(TemplatesDir, cfg.Template.Name), OutputDir)
+	err := copyDir(path.Join(TemplatesDir, cfg.Template.Name), OutputDir)
 	if err != nil {
 		log.Fatal(err)
 	}
