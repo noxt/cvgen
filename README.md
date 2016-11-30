@@ -1,6 +1,8 @@
 # cvgen
 
 [![Build Status](https://travis-ci.org/noxt/cvgen.svg?branch=master)](https://travis-ci.org/noxt/cvgen)
+[![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/noxt/cvgen/master/LICENSE.md)
+
 
 Build CV sites from YAML files!
 

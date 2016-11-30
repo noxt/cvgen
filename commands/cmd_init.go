@@ -4,6 +4,7 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -13,6 +14,11 @@ const (
 )
 
 type InitCommand struct {
+}
+
+func ConfigureInitCommand(app *kingpin.Application) {
+	cmd := &InitCommand{}
+	app.Command("init", "Initialize project structure").Action(cmd.run)
 }
 
 func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
@@ -48,16 +54,15 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 
 	for file, model := range parsingMap {
 		b, err := yaml.Marshal(model)
-		CheckIfError(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		err = ioutil.WriteFile(file, b, os.ModePerm)
-		CheckIfError(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return nil
-}
-
-func ConfigureInitCommand(app *kingpin.Application) {
-	cmd := &InitCommand{}
-	app.Command("init", "Initialize project structure").Action(cmd.run)
 }

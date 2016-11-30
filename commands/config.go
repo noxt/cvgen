@@ -24,16 +24,14 @@ func GetConfig() *config {
 		configInstance = &config{}
 
 		b, err := ioutil.ReadFile(ConfigFileName)
-		CheckIfError(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		err = yaml.Unmarshal(b, configInstance)
-		CheckIfError(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
 	return configInstance
-}
-
-func CheckIfError(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }

@@ -4,6 +4,7 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,7 +24,9 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 
 	if len(cfg.Template.RepoURL) > 0 {
 		err := cloneTemplateRepo(cfg.Template)
-		CheckIfError(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return nil
