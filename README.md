@@ -1,5 +1,7 @@
 # cvgen
 
+[![Build Status](https://travis-ci.org/noxt/cvgen.svg?branch=master)](https://travis-ci.org/noxt/cvgen)
+
 Build CV sites from YAML files!
 
 ## Configuration
