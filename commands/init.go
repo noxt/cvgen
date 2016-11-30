@@ -18,9 +18,9 @@ type InitCommand struct {
 func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 	var parsingMap = map[string]interface{}{
 		ConfigFileName: config{
-			Templates: templatesRepo{
-				Repo: DefaultTemplateRepo,
-				Name: DefaultTemplateName,
+			Template: templateRepo{
+				RepoURL: DefaultTemplateRepo,
+				Name:    DefaultTemplateName,
 			},
 		},
 		AboutMeFileName: me{

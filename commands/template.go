@@ -6,32 +6,56 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type TemplateCommand struct {
 }
 
+func ConfigureTemplateCommand(app *kingpin.Application) {
+	cmd := &TemplateCommand{}
+	template := app.Command("template", "CV templates")
+	template.Command("install", "Install templates from config file").Action(cmd.install)
+}
+
 func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 	cfg := GetConfig()
 
+	if len(cfg.Template.RepoURL) > 0 {
+		err := cloneTemplateRepo(cfg.Template)
+		CheckIfError(err)
+	}
+
+	return nil
+}
+
+func cloneTemplateRepo(repo templateRepo) error {
 	r := git.NewMemoryRepository()
 
-	err := r.Clone(&git.CloneOptions{
-		URL:          cfg.Templates.Repo,
-		SingleBranch: true,
-	})
-	CheckIfError(err)
+	if err := r.Clone(&git.CloneOptions{URL: repo.RepoURL}); err != nil {
+		return err
+	}
 
 	ref, err := r.Head()
-	CheckIfError(err)
+	if err != nil {
+		return err
+	}
 
 	commit, err := r.Commit(ref.Hash())
-	CheckIfError(err)
+	if err != nil {
+		return err
+	}
 
 	files, err := commit.Files()
-	CheckIfError(err)
+	if err != nil {
+		return err
+	}
 
 	err = files.ForEach(func(f *git.File) error {
+		if !strings.HasPrefix(f.Name, repo.Name) {
+			return nil
+		}
+
 		abs := filepath.Join(TemplatesDir, f.Name)
 		dir := filepath.Dir(abs)
 
@@ -57,13 +81,10 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 
 		return err
 	})
-	CheckIfError(err)
+
+	if err != nil {
+		return err
+	}
 
 	return nil
-}
-
-func ConfigureTemplateCommand(app *kingpin.Application) {
-	cmd := &TemplateCommand{}
-	template := app.Command("template", "CV templates")
-	template.Command("install", "Install templates from config file").Action(cmd.install)
 }

@@ -1,3 +1,3 @@
-templates:
-  repo: https://github.com/noxt/cvgen-templates
+template:
+  repo_url: https://github.com/noxt/cvgen-templates
   name: orbit

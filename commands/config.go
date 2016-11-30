@@ -8,12 +8,12 @@ import (
 )
 
 type config struct {
-	Templates templatesRepo
+	Template templateRepo
 }
 
-type templatesRepo struct {
-	Repo string
-	Name string
+type templateRepo struct {
+	RepoURL string `yaml:"repo_url"`
+	Name    string
 }
 
 var configInstance *config

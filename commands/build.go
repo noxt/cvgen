@@ -44,14 +44,14 @@ func (info *userInfo) load() {
 
 func (info *userInfo) render() {
 	cfg := GetConfig()
-	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Templates.Name, TemplateFileName))
+	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Name, TemplateFileName))
 	CheckIfError(err)
 
 	err = os.MkdirAll(OutputDir, os.ModePerm)
 	CheckIfError(err)
 
 	// TODO: Исправить копирование
-	c := exec.Command("/bin/sh", "-c", "cp -a "+path.Join(TemplatesDir, cfg.Templates.Name, "*")+" "+OutputDir)
+	c := exec.Command("/bin/sh", "-c", "cp -a "+path.Join(TemplatesDir, cfg.Template.Name, "*")+" "+OutputDir)
 	err = c.Run()
 	CheckIfError(err)
 
