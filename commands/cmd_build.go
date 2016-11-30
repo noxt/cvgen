@@ -3,10 +3,10 @@ package commands
 import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"text/template"
@@ -25,6 +25,7 @@ func ConfigureBuildCommand(app *kingpin.Application) {
 func (cmd *BuildCommand) run(c *kingpin.ParseContext) error {
 	var userInfo userInfo
 	userInfo.load()
+	userInfo.copyTemplate()
 	userInfo.render()
 
 	return nil
@@ -52,24 +53,22 @@ func (info *userInfo) load() {
 	}
 }
 
+func (info *userInfo) copyTemplate() {
+	cfg := GetConfig()
+
+	err := os.MkdirAll(OutputDir, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = copyDir(path.Join(TemplatesDir, cfg.Template.Name), OutputDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func (info *userInfo) render() {
 	cfg := GetConfig()
-	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Name, TemplateFileName))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = os.MkdirAll(OutputDir, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// TODO: Исправить копирование
-	c := exec.Command("/bin/sh", "-c", "cp -a "+path.Join(TemplatesDir, cfg.Template.Name, "*")+" "+OutputDir)
-	err = c.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	f, err := os.Create(path.Join(OutputDir, TemplateFileName))
 	if err != nil {
@@ -77,8 +76,50 @@ func (info *userInfo) render() {
 	}
 	defer f.Close()
 
+	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Name, TemplateFileName))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	err = t.Execute(f, info)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func copyDir(src, dst string) error {
+	err := filepath.Walk(src, func(srcPath string, info os.FileInfo, err error) error {
+		localPath, err := filepath.Rel(src, srcPath)
+		if err != nil {
+			return err
+		}
+
+		dstPath := filepath.Join(dst, localPath)
+
+		if info.IsDir() {
+			err = os.MkdirAll(dstPath, info.Mode())
+			return err
+		} else {
+			srcFile, err := os.Open(srcPath)
+			if err != nil {
+				return err
+			}
+			defer srcFile.Close()
+
+			dstFile, err := os.Create(dstPath)
+			if err != nil {
+				return err
+			}
+			defer dstFile.Close()
+
+			if err := dstFile.Chmod(info.Mode()); err != nil {
+				return err
+			}
+
+			_, err = io.Copy(dstFile, srcFile)
+			return err
+		}
+	})
+
+	return err
 }
