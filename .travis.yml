@@ -1,14 +1,8 @@
 language: go
 
-go:
-  - 1.6
-  - 1.7
-  - tip
+go: master
 
 script:
   - go get gopkg.in/alecthomas/kingpin.v2
   - go get gopkg.in/yaml.v2
   - go get gopkg.in/src-d/go-git.v4
-
-deploy:
-  skip_cleanup: true
