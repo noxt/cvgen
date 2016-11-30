@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
 	"io"
