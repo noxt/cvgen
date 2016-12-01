@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
 	"io"
@@ -27,6 +28,8 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 		if err != nil {
 			log.Fatal(err)
 		}
+	} else {
+		log.Fatal(errors.New("Template URL not specefied"))
 	}
 
 	return nil
@@ -35,7 +38,8 @@ func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
 func cloneTemplateRepo(repo templateRepo) error {
 	r := git.NewMemoryRepository()
 
-	if err := r.Clone(&git.CloneOptions{URL: repo.RepoURL}); err != nil {
+	err := r.Clone(&git.CloneOptions{URL: repo.RepoURL})
+	if err != nil {
 		return err
 	}
 
@@ -55,7 +59,7 @@ func cloneTemplateRepo(repo templateRepo) error {
 	}
 
 	err = files.ForEach(func(f *git.File) error {
-		if !strings.HasPrefix(f.Name, repo.Name) {
+		if len(repo.Path) > 0 && !strings.HasPrefix(f.Name, repo.Path) {
 			return nil
 		}
 
@@ -86,7 +90,14 @@ func cloneTemplateRepo(repo templateRepo) error {
 	})
 
 	if err != nil {
-		return err
+		log.Fatal(err)
+	}
+
+	if len(repo.Path) > 0 {
+		_, err := os.Stat(filepath.Join(TemplatesDir, repo.Path))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return nil

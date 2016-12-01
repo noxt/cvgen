@@ -10,6 +10,5 @@ const (
 )
 
 const (
-	TemplatesDir     = "templates"
-	TemplateFileName = "index.html"
+	TemplatesDir = "templates"
 )

@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	DefaultTemplateRepo = "https://github.com/noxt/cvgen-templates"
-	DefaultTemplateName = "orbit"
+	DefaultTemplateRepo     = "https://github.com/noxt/cvgen-templates"
+	DefaultTemplatePath     = "orbit"
+	DefaultTemplateFileName = "index.html"
 )
 
 type InitCommand struct {
@@ -25,8 +26,9 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 	var parsingMap = map[string]interface{}{
 		ConfigFileName: config{
 			Template: templateRepo{
-				RepoURL: DefaultTemplateRepo,
-				Name:    DefaultTemplateName,
+				RepoURL:  DefaultTemplateRepo,
+				Path:     DefaultTemplatePath,
+				FileName: DefaultTemplateFileName,
 			},
 		},
 		AboutMeFileName: me{

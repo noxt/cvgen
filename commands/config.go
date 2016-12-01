@@ -12,8 +12,9 @@ type config struct {
 }
 
 type templateRepo struct {
-	RepoURL string `yaml:"repo_url"`
-	Name    string
+	RepoURL  string `yaml:"repo_url"`
+	Path     string
+	FileName string `yaml:"file_name"`
 }
 
 var configInstance *config

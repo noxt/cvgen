@@ -1,3 +1,4 @@
 template:
   repo_url: https://github.com/noxt/cvgen-templates
-  name: orbit
+  path: orbit/
+  file_name: index.html

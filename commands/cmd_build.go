@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io"
@@ -56,7 +57,12 @@ func (info *userInfo) load() {
 func (info *userInfo) copyTemplate() {
 	cfg := GetConfig()
 
-	err := copyDir(path.Join(TemplatesDir, cfg.Template.Name), OutputDir)
+	inputDir := TemplatesDir
+	if len(cfg.Template.Path) > 0 {
+		inputDir = path.Join(inputDir, cfg.Template.Path)
+	}
+
+	err := copyDir(inputDir, OutputDir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,13 +71,17 @@ func (info *userInfo) copyTemplate() {
 func (info *userInfo) render() {
 	cfg := GetConfig()
 
-	f, err := os.Create(path.Join(OutputDir, TemplateFileName))
+	if len(cfg.Template.FileName) == 0 {
+		log.Fatal(errors.New("Template file name not specified"))
+	}
+
+	f, err := os.Create(path.Join(OutputDir, cfg.Template.FileName))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 
-	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Name, TemplateFileName))
+	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Path, cfg.Template.FileName))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,7 +117,8 @@ func copyDir(src, dst string) error {
 			}
 			defer dstFile.Close()
 
-			if err := dstFile.Chmod(info.Mode()); err != nil {
+			err = dstFile.Chmod(info.Mode())
+			if err != nil {
 				return err
 			}
 
