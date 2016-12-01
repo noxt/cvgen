@@ -26,9 +26,9 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 	var parsingMap = map[string]interface{}{
 		ConfigFileName: config{
 			Template: templateRepo{
-				RepoURL:  DefaultTemplateRepo,
-				Path:     DefaultTemplatePath,
-				FileName: DefaultTemplateFileName,
+				RepoURL: DefaultTemplateRepo,
+				Path:    DefaultTemplatePath,
+				Files:   []string{DefaultTemplateFileName},
 			},
 		},
 		AboutMeFileName: me{

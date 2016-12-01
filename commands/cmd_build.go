@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
 	"text/template"
 )
@@ -59,7 +58,7 @@ func (info *userInfo) copyTemplate() {
 
 	inputDir := TemplatesDir
 	if len(cfg.Template.Path) > 0 {
-		inputDir = path.Join(inputDir, cfg.Template.Path)
+		inputDir = filepath.Join(inputDir, cfg.Template.Path)
 	}
 
 	err := copyDir(inputDir, OutputDir)
@@ -71,24 +70,26 @@ func (info *userInfo) copyTemplate() {
 func (info *userInfo) render() {
 	cfg := GetConfig()
 
-	if len(cfg.Template.FileName) == 0 {
+	if len(cfg.Template.Files) == 0 {
 		log.Fatal(errors.New("Template file name not specified"))
 	}
 
-	f, err := os.Create(path.Join(OutputDir, cfg.Template.FileName))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
+	for _, filename := range cfg.Template.Files {
+		f, err := os.Create(filepath.Join(OutputDir, filename))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
 
-	t, err := template.ParseFiles(path.Join(TemplatesDir, cfg.Template.Path, cfg.Template.FileName))
-	if err != nil {
-		log.Fatal(err)
-	}
+		t, err := template.ParseFiles(filepath.Join(TemplatesDir, cfg.Template.Path, filename))
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	err = t.Execute(f, info)
-	if err != nil {
-		log.Fatal(err)
+		err = t.Execute(f, info)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
