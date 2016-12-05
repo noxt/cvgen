@@ -14,7 +14,7 @@ const (
 	defaultTemplateFileName = "index.html"
 )
 
-// Configure init command
+// ConfigureInitCommand setup "init" command
 func ConfigureInitCommand(app *kingpin.Application) {
 	app.Command("init", "Initialize YAML files into current directory").Action(runInitCommand)
 }

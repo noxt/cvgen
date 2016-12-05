@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// Configure template command
+// ConfigureTemplateCommand setup "template" command
 func ConfigureTemplateCommand(app *kingpin.Application) {
 	template := app.Command("template", "Template engine")
 	template.Command("install", "Install CV site template from config file").Action(runInstallCommand)

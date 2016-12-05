@@ -14,7 +14,7 @@ import (
 
 const outputDir = "output"
 
-// Configure build command
+// ConfigureBuildCommand setup "build" command
 func ConfigureBuildCommand(app *kingpin.Application) {
 	app.Command("build", "Build CV site from current directory").Action(runBuildCommand)
 }
@@ -109,30 +109,32 @@ func copyDir(src, dst string) error {
 
 		dstPath := filepath.Join(dst, localPath)
 
+		// Copy dir
 		if info.IsDir() {
 			err = os.MkdirAll(dstPath, info.Mode())
 			return err
-		} else {
-			srcFile, err := os.Open(srcPath)
-			if err != nil {
-				return err
-			}
-			defer srcFile.Close()
+		}
 
-			dstFile, err := os.Create(dstPath)
-			if err != nil {
-				return err
-			}
-			defer dstFile.Close()
-
-			err = dstFile.Chmod(info.Mode())
-			if err != nil {
-				return err
-			}
-
-			_, err = io.Copy(dstFile, srcFile)
+		// Copy file
+		srcFile, err := os.Open(srcPath)
+		if err != nil {
 			return err
 		}
+		defer srcFile.Close()
+
+		dstFile, err := os.Create(dstPath)
+		if err != nil {
+			return err
+		}
+		defer dstFile.Close()
+
+		err = dstFile.Chmod(info.Mode())
+		if err != nil {
+			return err
+		}
+
+		_, err = io.Copy(dstFile, srcFile)
+		return err
 	})
 
 	return err
