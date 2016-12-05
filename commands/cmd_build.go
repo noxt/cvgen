@@ -12,17 +12,14 @@ import (
 	"text/template"
 )
 
-const OutputDir = "output"
+const outputDir = "output"
 
-type BuildCommand struct {
-}
-
+// Configure build command
 func ConfigureBuildCommand(app *kingpin.Application) {
-	cmd := &BuildCommand{}
-	app.Command("build", "Build CV site").Action(cmd.run)
+	app.Command("build", "Build CV site from current directory").Action(runBuildCommand)
 }
 
-func (cmd *BuildCommand) run(c *kingpin.ParseContext) error {
+func runBuildCommand(*kingpin.ParseContext) error {
 	var userInfo userInfo
 	userInfo.load()
 	userInfo.copyTemplate()
@@ -32,12 +29,14 @@ func (cmd *BuildCommand) run(c *kingpin.ParseContext) error {
 }
 
 func (info *userInfo) load() {
+	log.Println("Start parsing YAML files...")
+
 	var parsingMap = map[string]interface{}{
-		AboutMeFileName:       &info.AboutMe,
-		EducationFileName:     &info.Educations,
-		OrganizationsFileName: &info.Organizations,
-		ProjectsFileName:      &info.Projects,
-		SkillsFileName:        &info.Skills,
+		aboutMeFileName:       &info.AboutMe,
+		educationFileName:     &info.Educations,
+		organizationsFileName: &info.Organizations,
+		projectsFileName:      &info.Projects,
+		skillsFileName:        &info.Skills,
 	}
 
 	for file, model := range parsingMap {
@@ -51,20 +50,26 @@ func (info *userInfo) load() {
 			log.Fatal(err)
 		}
 	}
+
+	log.Println("YAML files successfully parsed!")
 }
 
 func (info *userInfo) copyTemplate() {
+	log.Println("Start copying template...")
+
 	cfg := GetConfig()
 
-	inputDir := TemplatesDir
+	inputDir := templatesDir
 	if len(cfg.Template.Path) > 0 {
 		inputDir = filepath.Join(inputDir, cfg.Template.Path)
 	}
 
-	err := copyDir(inputDir, OutputDir)
+	err := copyDir(inputDir, outputDir)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("Template successfully copied!")
 }
 
 func (info *userInfo) render() {
@@ -75,13 +80,15 @@ func (info *userInfo) render() {
 	}
 
 	for _, filename := range cfg.Template.Files {
-		f, err := os.Create(filepath.Join(OutputDir, filename))
+		log.Printf("Render template: %v\n", filepath.Join(outputDir, filename))
+
+		f, err := os.Create(filepath.Join(outputDir, filename))
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer f.Close()
 
-		t, err := template.ParseFiles(filepath.Join(TemplatesDir, cfg.Template.Path, filename))
+		t, err := template.ParseFiles(filepath.Join(templatesDir, cfg.Template.Path, filename))
 		if err != nil {
 			log.Fatal(err)
 		}

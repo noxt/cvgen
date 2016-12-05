@@ -1,14 +1,14 @@
 package commands
 
 const (
-	ConfigFileName        = "config.yaml"
-	AboutMeFileName       = "about.yaml"
-	EducationFileName     = "education.yaml"
-	OrganizationsFileName = "organizations.yaml"
-	ProjectsFileName      = "projects.yaml"
-	SkillsFileName        = "skills.yaml"
+	configFileName        = "config.yaml"
+	aboutMeFileName       = "about.yaml"
+	educationFileName     = "education.yaml"
+	organizationsFileName = "organizations.yaml"
+	projectsFileName      = "projects.yaml"
+	skillsFileName        = "skills.yaml"
 )
 
 const (
-	TemplatesDir = "templates"
+	templatesDir = "templates"
 )

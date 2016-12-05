@@ -9,49 +9,30 @@ import (
 )
 
 const (
-	DefaultTemplateRepo     = "https://github.com/noxt/cvgen-templates"
-	DefaultTemplatePath     = "orbit"
-	DefaultTemplateFileName = "index.html"
+	defaultTemplateRepo     = "https://github.com/noxt/cvgen-templates"
+	defaultTemplatePath     = "orbit"
+	defaultTemplateFileName = "index.html"
 )
 
-type InitCommand struct {
-}
-
+// Configure init command
 func ConfigureInitCommand(app *kingpin.Application) {
-	cmd := &InitCommand{}
-	app.Command("init", "Initialize project structure").Action(cmd.run)
+	app.Command("init", "Initialize YAML files into current directory").Action(runInitCommand)
 }
 
-func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
+func runInitCommand(*kingpin.ParseContext) error {
 	var parsingMap = map[string]interface{}{
-		ConfigFileName: config{
+		configFileName: config{
 			Template: templateRepo{
-				RepoURL: DefaultTemplateRepo,
-				Path:    DefaultTemplatePath,
-				Files:   []string{DefaultTemplateFileName},
+				RepoURL: defaultTemplateRepo,
+				Path:    defaultTemplatePath,
+				Files:   []string{defaultTemplateFileName},
 			},
 		},
-		AboutMeFileName: me{
-			Languages: []language{
-				language{},
-			},
-		},
-		EducationFileName: []education{
-			education{},
-		},
-		OrganizationsFileName: []organization{
-			organization{
-				Projects: []project{
-					project{},
-				},
-			},
-		},
-		ProjectsFileName: []project{
-			project{},
-		},
-		SkillsFileName: []skill{
-			skill{},
-		},
+		aboutMeFileName:       me{Languages: []language{{}}},
+		educationFileName:     []education{{}},
+		organizationsFileName: []organization{{Projects: []project{{}}}},
+		projectsFileName:      []project{{}},
+		skillsFileName:        []skill{{}},
 	}
 
 	for file, model := range parsingMap {
@@ -65,6 +46,8 @@ func (cmd *InitCommand) run(c *kingpin.ParseContext) error {
 			log.Fatal(err)
 		}
 	}
+
+	log.Println("Successful initialization")
 
 	return nil
 }

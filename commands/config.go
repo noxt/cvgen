@@ -20,11 +20,12 @@ type templateRepo struct {
 var configInstance *config
 var once sync.Once
 
+// Get current config
 func GetConfig() *config {
 	once.Do(func() {
 		configInstance = &config{}
 
-		b, err := ioutil.ReadFile(ConfigFileName)
+		b, err := ioutil.ReadFile(configFileName)
 		if err != nil {
 			log.Fatal(err)
 		}

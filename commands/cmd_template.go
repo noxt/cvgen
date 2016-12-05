@@ -7,20 +7,18 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
 
-type TemplateCommand struct {
-}
-
+// Configure template command
 func ConfigureTemplateCommand(app *kingpin.Application) {
-	cmd := &TemplateCommand{}
-	template := app.Command("template", "CV templates")
-	template.Command("install", "Install templates from config file").Action(cmd.install)
+	template := app.Command("template", "Template engine")
+	template.Command("install", "Install CV site template from config file").Action(runInstallCommand)
 }
 
-func (cmd *TemplateCommand) install(c *kingpin.ParseContext) error {
+func runInstallCommand(*kingpin.ParseContext) error {
 	cfg := GetConfig()
 
 	if len(cfg.Template.RepoURL) > 0 {
@@ -63,7 +61,7 @@ func cloneTemplateRepo(repo templateRepo) error {
 			return nil
 		}
 
-		abs := filepath.Join(TemplatesDir, f.Name)
+		abs := filepath.Join(templatesDir, f.Name)
 		dir := filepath.Dir(abs)
 
 		os.MkdirAll(dir, os.ModePerm)
@@ -94,10 +92,14 @@ func cloneTemplateRepo(repo templateRepo) error {
 	}
 
 	if len(repo.Path) > 0 {
-		_, err := os.Stat(filepath.Join(TemplatesDir, repo.Path))
+		_, err := os.Stat(filepath.Join(templatesDir, repo.Path))
 		if err != nil {
 			log.Fatal(err)
+		} else {
+			log.Printf("Template successfully cloned: %v\n", path.Join(repo.RepoURL, repo.Path))
 		}
+	} else {
+		log.Printf("Template successfully cloned: %v\n", repo.RepoURL)
 	}
 
 	return nil
