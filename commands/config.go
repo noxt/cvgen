@@ -20,7 +20,7 @@ type templateRepo struct {
 var configInstance *config
 var once sync.Once
 
-// Get current config
+// GetConfig return loaded from file config
 func GetConfig() *config {
 	once.Do(func() {
 		configInstance = &config{}
