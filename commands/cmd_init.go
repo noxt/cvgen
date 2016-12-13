@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -20,6 +21,13 @@ func ConfigureInitCommand(app *kingpin.Application) {
 }
 
 func runInitCommand(*kingpin.ParseContext) error {
+	generateYAMLFiles()
+	return nil
+}
+
+func generateYAMLFiles() {
+	log.Println("init: generate YAML files: start")
+
 	var parsingMap = map[string]interface{}{
 		configFileName: config{
 			Template: templateRepo{
@@ -38,16 +46,14 @@ func runInitCommand(*kingpin.ParseContext) error {
 	for file, model := range parsingMap {
 		b, err := yaml.Marshal(model)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("init: encoding YAML: %v", err))
 		}
 
 		err = ioutil.WriteFile(file, b, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("init: save YAML file: %v", err))
 		}
 	}
 
-	log.Println("Successful initialization")
-
-	return nil
+	log.Println("init: generate YAML files: finish")
 }

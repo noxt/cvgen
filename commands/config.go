@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -27,13 +28,14 @@ func GetConfig() *config {
 
 		b, err := ioutil.ReadFile(configFileName)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("config: read file: %v", err))
 		}
 
 		err = yaml.Unmarshal(b, configInstance)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("config: decode YAML: %v", err))
 		}
 	})
+
 	return configInstance
 }

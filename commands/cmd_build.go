@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"errors"
+	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io"
@@ -20,16 +20,17 @@ func ConfigureBuildCommand(app *kingpin.Application) {
 }
 
 func runBuildCommand(*kingpin.ParseContext) error {
-	var userInfo userInfo
-	userInfo.load()
-	userInfo.copyTemplate()
-	userInfo.render()
+	userInfo := userInfo{}
+
+	parseYAMLFiles(&userInfo)
+	copyTemplate()
+	render(&userInfo)
 
 	return nil
 }
 
-func (info *userInfo) load() {
-	log.Println("Start parsing YAML files...")
+func parseYAMLFiles(info *userInfo) {
+	log.Println("build: parsing YAML files: start")
 
 	var parsingMap = map[string]interface{}{
 		aboutMeFileName:       &info.AboutMe,
@@ -42,20 +43,20 @@ func (info *userInfo) load() {
 	for file, model := range parsingMap {
 		b, err := ioutil.ReadFile(filepath.Join("./", file))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("build: read YAML file: %v", err))
 		}
 
 		err = yaml.Unmarshal(b, model)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Errorf("build: decoding YAML: %v", err))
 		}
 	}
 
-	log.Println("YAML files successfully parsed!")
+	log.Println("build: parsing YAML files: finish")
 }
 
-func (info *userInfo) copyTemplate() {
-	log.Println("Start copying template...")
+func copyTemplate() {
+	log.Println("build: copy template: start")
 
 	cfg := GetConfig()
 
@@ -64,44 +65,67 @@ func (info *userInfo) copyTemplate() {
 		inputDir = filepath.Join(inputDir, cfg.Template.Path)
 	}
 
-	err := copyDir(inputDir, outputDir)
+	stat, err := os.Stat(inputDir)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Errorf("build: read template dir: %v", err))
 	}
 
-	log.Println("Template successfully copied!")
+	if !stat.IsDir() {
+		log.Fatal("build: read template dir: isn't dir")
+	}
+
+	err = copyDir(inputDir, outputDir)
+	if err != nil {
+		log.Fatal(fmt.Errorf("build: copy template: %v", err))
+	}
+
+	log.Println("build: copy template: finish")
 }
 
-func (info *userInfo) render() {
+func render(info *userInfo) {
+	log.Println("build: render template: start")
+
 	cfg := GetConfig()
 
 	if len(cfg.Template.Files) == 0 {
-		log.Fatal(errors.New("Template file name not specified"))
+		log.Fatal("build: render template: template file name not specified")
 	}
 
 	for _, filename := range cfg.Template.Files {
-		log.Printf("Render template: %v\n", filepath.Join(outputDir, filename))
+		renderTemplate(filename, info)
+	}
 
-		f, err := os.Create(filepath.Join(outputDir, filename))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
+	log.Println("build: render template: finish")
+}
 
-		t, err := template.ParseFiles(filepath.Join(templatesDir, cfg.Template.Path, filename))
-		if err != nil {
-			log.Fatal(err)
-		}
+func renderTemplate(filename string, info *userInfo) {
+	cfg := GetConfig()
 
-		err = t.Execute(f, info)
-		if err != nil {
-			log.Fatal(err)
-		}
+	log.Printf("build: render template: render %v", filepath.Join(outputDir, filename))
+
+	f, err := os.Create(filepath.Join(outputDir, filename))
+	if err != nil {
+		log.Fatal(fmt.Errorf("build: create template file: %v", err))
+	}
+	defer f.Close()
+
+	t, err := template.ParseFiles(filepath.Join(templatesDir, cfg.Template.Path, filename))
+	if err != nil {
+		log.Fatal(fmt.Errorf("build: parsing template: %v", err))
+	}
+
+	err = t.Execute(f, info)
+	if err != nil {
+		log.Fatal(fmt.Errorf("build: render template: %v", err))
 	}
 }
 
 func copyDir(src, dst string) error {
 	err := filepath.Walk(src, func(srcPath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
 		localPath, err := filepath.Rel(src, srcPath)
 		if err != nil {
 			return err

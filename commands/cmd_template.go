@@ -1,13 +1,12 @@
 package commands
 
 import (
-	"errors"
+	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
 	"io"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 )
@@ -19,41 +18,44 @@ func ConfigureTemplateCommand(app *kingpin.Application) {
 }
 
 func runInstallCommand(*kingpin.ParseContext) error {
+	log.Println("template: install template: start")
+
 	cfg := GetConfig()
 
 	if len(cfg.Template.RepoURL) > 0 {
-		err := cloneTemplateRepo(cfg.Template)
-		if err != nil {
-			log.Fatal(err)
-		}
+		cloneRepo(cfg.Template)
 	} else {
-		log.Fatal(errors.New("Template URL not specefied"))
+		log.Fatal("template: install template: repo URL not specefied")
 	}
+
+	log.Println("template: install template: finish")
 
 	return nil
 }
 
-func cloneTemplateRepo(repo templateRepo) error {
+func cloneRepo(repo templateRepo) {
+	log.Println("template: clone repo: start")
+
 	r := git.NewMemoryRepository()
 
 	err := r.Clone(&git.CloneOptions{URL: repo.RepoURL})
 	if err != nil {
-		return err
+		log.Fatal(fmt.Errorf("template: clone repo: %v", err))
 	}
 
 	ref, err := r.Head()
 	if err != nil {
-		return err
+		log.Fatal(fmt.Errorf("template: clone repo: %v", err))
 	}
 
 	commit, err := r.Commit(ref.Hash())
 	if err != nil {
-		return err
+		log.Fatal(fmt.Errorf("template: clone repo: %v", err))
 	}
 
 	files, err := commit.Files()
 	if err != nil {
-		return err
+		log.Fatal(fmt.Errorf("template: clone repo: %v", err))
 	}
 
 	err = files.ForEach(func(f *git.File) error {
@@ -64,43 +66,38 @@ func cloneTemplateRepo(repo templateRepo) error {
 		abs := filepath.Join(templatesDir, f.Name)
 		dir := filepath.Dir(abs)
 
-		os.MkdirAll(dir, os.ModePerm)
+		err := os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return fmt.Errorf("template: create dir: %v", err)
+		}
 
 		file, err := os.Create(abs)
 		if err != nil {
-			return err
+			return fmt.Errorf("template: create file: %v", err)
 		}
 		defer file.Close()
 
 		r, err := f.Reader()
 		if err != nil {
-			return err
+			return fmt.Errorf("template: read file: %v", err)
 		}
 		defer r.Close()
 
 		if err := file.Chmod(f.Mode); err != nil {
-			return err
+			return fmt.Errorf("template: chmod: %v", err)
 		}
 
 		_, err = io.Copy(file, r)
+		if err != nil {
+			return fmt.Errorf("template: copy file: %v", err)
+		}
 
-		return err
+		return nil
 	})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if len(repo.Path) > 0 {
-		_, err := os.Stat(filepath.Join(templatesDir, repo.Path))
-		if err != nil {
-			log.Fatal(err)
-		} else {
-			log.Printf("Template successfully cloned: %v\n", path.Join(repo.RepoURL, repo.Path))
-		}
-	} else {
-		log.Printf("Template successfully cloned: %v\n", repo.RepoURL)
-	}
-
-	return nil
+	log.Println("template: clone repo: finish")
 }
