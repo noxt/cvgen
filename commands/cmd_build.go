@@ -24,7 +24,7 @@ func runBuildCommand(*kingpin.ParseContext) error {
 
 	parseYAMLFiles(&userInfo)
 	copyTemplate()
-	render(&userInfo)
+	renderTemplate(&userInfo)
 
 	return nil
 }
@@ -82,7 +82,7 @@ func copyTemplate() {
 	log.Println("build: copy template: finish")
 }
 
-func render(info *userInfo) {
+func renderTemplate(info *userInfo) {
 	log.Println("build: render template: start")
 
 	cfg := GetConfig()
@@ -92,13 +92,13 @@ func render(info *userInfo) {
 	}
 
 	for _, filename := range cfg.Template.Files {
-		renderTemplate(filename, info)
+		renderTemplateFile(filename, info)
 	}
 
 	log.Println("build: render template: finish")
 }
 
-func renderTemplate(filename string, info *userInfo) {
+func renderTemplateFile(filename string, info *userInfo) {
 	cfg := GetConfig()
 
 	log.Printf("build: render template: render %v", filepath.Join(outputDir, filename))
