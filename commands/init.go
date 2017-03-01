@@ -2,17 +2,14 @@ package commands
 
 import (
 	"fmt"
+	"github.com/noxt/cvgen/config"
+	"github.com/noxt/cvgen/constants"
+	"github.com/noxt/cvgen/models"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
-)
-
-const (
-	defaultTemplateRepo     = "https://github.com/noxt/cvgen-templates"
-	defaultTemplatePath     = "orbit"
-	defaultTemplateFileName = "index.html"
 )
 
 // ConfigureInitCommand setup "init" command
@@ -29,18 +26,12 @@ func generateYAMLFiles() {
 	log.Println("init: generate YAML files: start")
 
 	var parsingMap = map[string]interface{}{
-		configFileName: config{
-			Template: templateRepo{
-				RepoURL: defaultTemplateRepo,
-				Path:    defaultTemplatePath,
-				Files:   []string{defaultTemplateFileName},
-			},
-		},
-		aboutMeFileName:       me{Languages: []language{{}}},
-		educationFileName:     []education{{}},
-		organizationsFileName: []organization{{Projects: []project{{}}}},
-		projectsFileName:      []project{{}},
-		skillsFileName:        []skill{{}},
+		constants.ConfigFileName:        config.NewConfig(),
+		constants.AboutMeFileName:       models.Me{Languages: []models.Language{{}}},
+		constants.EducationFileName:     []models.Education{{}},
+		constants.OrganizationsFileName: []models.Organization{{Projects: []models.Project{{}}}},
+		constants.ProjectsFileName:      []models.Project{{}},
+		constants.SkillsFileName:        []models.Skill{{}},
 	}
 
 	for file, model := range parsingMap {

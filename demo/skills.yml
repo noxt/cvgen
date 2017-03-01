@@ -10,8 +10,11 @@
 - name: Objective-C
   progress: 60%
 
+- name: Go
+  progress: 25%
+
+- name: ReactNative
+  progress: 25%
+
 - name: Python
   progress: 20%
-
-- name: Go
-  progress: 10%

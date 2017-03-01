@@ -2,6 +2,9 @@ package commands
 
 import (
 	"fmt"
+	"github.com/noxt/cvgen/config"
+	"github.com/noxt/cvgen/constants"
+	"github.com/noxt/cvgen/models"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/src-d/go-git.v4"
 	"io"
@@ -20,7 +23,7 @@ func ConfigureTemplateCommand(app *kingpin.Application) {
 func runInstallCommand(*kingpin.ParseContext) error {
 	log.Println("template: install template: start")
 
-	cfg := GetConfig()
+	cfg := config.GetConfig()
 
 	if len(cfg.Template.RepoURL) > 0 {
 		cloneRepo(cfg.Template)
@@ -33,7 +36,7 @@ func runInstallCommand(*kingpin.ParseContext) error {
 	return nil
 }
 
-func cloneRepo(repo templateRepo) {
+func cloneRepo(repo models.TemplateRepo) {
 	log.Println("template: clone repo: start")
 
 	r := git.NewMemoryRepository()
@@ -63,7 +66,7 @@ func cloneRepo(repo templateRepo) {
 			return nil
 		}
 
-		abs := filepath.Join(templatesDir, f.Name)
+		abs := filepath.Join(constants.TemplatesDir, f.Name)
 		dir := filepath.Dir(abs)
 
 		err := os.MkdirAll(dir, os.ModePerm)

@@ -2,6 +2,9 @@ package commands
 
 import (
 	"fmt"
+	"github.com/noxt/cvgen/config"
+	"github.com/noxt/cvgen/constants"
+	"github.com/noxt/cvgen/models"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v2"
 	"io"
@@ -12,15 +15,13 @@ import (
 	"text/template"
 )
 
-const outputDir = "output"
-
 // ConfigureBuildCommand setup "build" command
 func ConfigureBuildCommand(app *kingpin.Application) {
 	app.Command("build", "Build CV site from current directory").Action(runBuildCommand)
 }
 
 func runBuildCommand(*kingpin.ParseContext) error {
-	userInfo := userInfo{}
+	userInfo := models.UserInfo{}
 
 	parseYAMLFiles(&userInfo)
 	copyTemplate()
@@ -29,21 +30,21 @@ func runBuildCommand(*kingpin.ParseContext) error {
 	return nil
 }
 
-func parseYAMLFiles(info *userInfo) {
+func parseYAMLFiles(info *models.UserInfo) {
 	log.Println("build: parsing YAML files: start")
 
 	var parsingMap = map[string]interface{}{
-		aboutMeFileName:       &info.AboutMe,
-		educationFileName:     &info.Educations,
-		organizationsFileName: &info.Organizations,
-		projectsFileName:      &info.Projects,
-		skillsFileName:        &info.Skills,
+		constants.AboutMeFileName:       &info.AboutMe,
+		constants.EducationFileName:     &info.Educations,
+		constants.OrganizationsFileName: &info.Organizations,
+		constants.ProjectsFileName:      &info.Projects,
+		constants.SkillsFileName:        &info.Skills,
 	}
 
 	for file, model := range parsingMap {
 		b, err := ioutil.ReadFile(filepath.Join("./", file))
 		if err != nil {
-			log.Fatal(fmt.Errorf("build: read YAML file: %v", err))
+			break
 		}
 
 		err = yaml.Unmarshal(b, model)
@@ -58,9 +59,9 @@ func parseYAMLFiles(info *userInfo) {
 func copyTemplate() {
 	log.Println("build: copy template: start")
 
-	cfg := GetConfig()
+	cfg := config.GetConfig()
 
-	inputDir := templatesDir
+	inputDir := constants.TemplatesDir
 	if len(cfg.Template.Path) > 0 {
 		inputDir = filepath.Join(inputDir, cfg.Template.Path)
 	}
@@ -74,7 +75,7 @@ func copyTemplate() {
 		log.Fatal("build: read template dir: isn't dir")
 	}
 
-	err = copyDir(inputDir, outputDir)
+	err = copyDir(inputDir, cfg.OutputDir)
 	if err != nil {
 		log.Fatal(fmt.Errorf("build: copy template: %v", err))
 	}
@@ -82,10 +83,10 @@ func copyTemplate() {
 	log.Println("build: copy template: finish")
 }
 
-func renderTemplate(info *userInfo) {
+func renderTemplate(info *models.UserInfo) {
 	log.Println("build: render template: start")
 
-	cfg := GetConfig()
+	cfg := config.GetConfig()
 
 	if len(cfg.Template.Files) == 0 {
 		log.Fatal("build: render template: template file name not specified")
@@ -98,18 +99,18 @@ func renderTemplate(info *userInfo) {
 	log.Println("build: render template: finish")
 }
 
-func renderTemplateFile(filename string, info *userInfo) {
-	cfg := GetConfig()
+func renderTemplateFile(filename string, info *models.UserInfo) {
+	cfg := config.GetConfig()
 
-	log.Printf("build: render template: render %v", filepath.Join(outputDir, filename))
+	log.Printf("build: render template: render %v", filepath.Join(cfg.OutputDir, filename))
 
-	f, err := os.Create(filepath.Join(outputDir, filename))
+	f, err := os.Create(filepath.Join(cfg.OutputDir, filename))
 	if err != nil {
 		log.Fatal(fmt.Errorf("build: create template file: %v", err))
 	}
 	defer f.Close()
 
-	t, err := template.ParseFiles(filepath.Join(templatesDir, cfg.Template.Path, filename))
+	t, err := template.ParseFiles(filepath.Join(constants.TemplatesDir, cfg.Template.Path, filename))
 	if err != nil {
 		log.Fatal(fmt.Errorf("build: parsing template: %v", err))
 	}
