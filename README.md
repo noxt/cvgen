@@ -10,7 +10,7 @@ Build CV sites from YAML files!
 ## Configuration
 
 ```yaml
-# cvgen.yaml
+# config.yml
 
 template:
   repo_url: https://github.com/noxt/cvgen-templates
