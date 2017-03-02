@@ -7,3 +7,23 @@
   link: https://github.com/noxt/cvgen
   description: Генерация CV сайтов на основе YAML файлов
   technologies: Go
+
+- name: JSON Model Generator
+  link: https://github.com/noxt/json-model-generator
+  description: Генерация Swift-овых моделей на основе JSON Schema
+  technologies: NodeJS, Swift
+
+- name: GridKit
+  link: https://github.com/noxt/GridKit
+  description: "Декларативное описание таблиц. Аналог <code>TableKit</code>, но для <code>StackView</code>"
+  technologies: Swift
+
+- name: Generamba Templates
+  link: https://github.com/noxt/generamba-templates
+  description: Мои шаблоны для VIPER модулей
+  technologies: Swift, Liquid
+
+- name: Sportivity
+  link: http://garage48.org/blog/the-winner-of-garage48-minsk-2015-took-video-technology-to-a-whole-new-level
+  description: Это приложение победило на хакатоне Garage48 в номинации Top Grossing
+  technologies: Swift

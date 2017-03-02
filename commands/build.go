@@ -49,7 +49,7 @@ func parseYAMLFiles(info *models.UserInfo) {
 
 		err = yaml.Unmarshal(b, model)
 		if err != nil {
-			log.Fatal(fmt.Errorf("build: decoding YAML: %v", err))
+			log.Fatal(fmt.Errorf("build: decoding %v: %v", file, err))
 		}
 	}
 

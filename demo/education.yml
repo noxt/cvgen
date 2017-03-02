@@ -2,7 +2,12 @@
   start: 2014
   degree: Магистратура
 
+- name: iTechArt Group
+  start: 2013
+  end: 2013
+  degree: Курсы разработки под iOS
+
 - name: БГУИР
   start: 2009
   end: 2014
-  degree: Математик, Системный программист
+  degree: Математик; системный программист

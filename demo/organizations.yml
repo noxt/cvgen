@@ -1,15 +1,74 @@
+- name: AT Consulting
+  city: Санкт-Петербург
+  link: https://www.at-consulting.ru/
+  description: Аутстафинг разработки мобильных приложений
+  role: iOS Developer
+  start: 08.2016
+  projects:
+    - name: "Сбербанк. ЕФС: Компонентная команда"
+      description: Создаем компоненты, из которых в дальнейшем создаются другие продукты компании.
+      technologies: ReactNative, Objective-C, VIPER
+    - name: "Сбербанк. ЕФС: РМ КМ"
+      description: "Разрабатывали первый этап приложения для рабочего места клиенсткого менеджера. Паралельно разрабатывалось два приложения на Swift и ReactNative. Потом руководство решило оставить только на ReactNative и мы перешли в компонентную команду."
+      challenges:
+        - Работа с JSON Schema
+        - Продумывание подхода к разработке, который минимизировал бы время на разработку новых экранов
+      technologies: Swift, VIPER, Realm
+- name: Seasoncard
+  city: Минск
+  link: https://seasoncard.by/
+  description: Маленький проект на фрилансе, друзья попросили помочь с приложением под iOS
+  role: iOS Developer
+  start: 02.2016
+  end: 04.2016
+  projects:
+    - name: Seasoncard
+      link: https://itunes.apple.com/ru/app/kartka/id1104274153
+      description: Приложение для проходок в спортзалы + система управления абонементов. Так же выступал в роли, какого-никакого, дизайнера
+      technologies: Swift, VIPER
+- name: SmartIT
+  city: Минск
+  link: http://smart-it.by
+  description: Разработка мобильных приложений на аутсорс
+  role: iOS Developer
+  start: 10.2015
+  end: 08.2016
+  projects:
+    - name: Alta Window Fashions
+      link: https://www.altawindowfashions.com/
+      description: Доработка приложения для замерщиков окон. В приложении для iPad можно вводить свои параметры, выбирать какое оформление окон желает клиент и сразу сделать заказ.
+      technologies: Objective-C, MVС, CoreData
+    - name: Аукционный дом №1
+      description: "Приложение для аукционного дома с возможностью делать ставки и покупать лоты.<br>Дизайн был в виде набора цветов + что хотят видеть на этом экране, поэтому приходилось иногда продумывать и как это будет выглядеть"
+      challenges:
+        - Система торгов
+        - Документирование API
+      technologies: Swift, VIPER, Realm, SocketIO
+- name: Game Show
+  city: Минск
+  link: https://gameshow.ru/
+  description: "Создание системы для проведения турниров в киберспорте.<br />Это был стартап, на который нашли инвесторов, наняли разрабов. Вроде бы было все хорошо, пока не оказалось, что у основателей нет фин. модели, а деньги инвесторов они просаживали разъезжая по отпускам и конференциям. В итоге финансирование закрылось, собственно как и сам проект."
+  role: Python Developer
+  start: 08.2015
+  end: 10.2015
 - name: ARTOX
   city: Минск
   link: http://www.artox.com
-  description: Разработка приложений для сайтов компании
-  role: iOS Developer
-  start: 02.2010
+  description: "Управление командой, состоящей из <i>3 бэков</i>, <i>1 фронта</i> и <i>2 QA</i>.<br />Планирование и разбиение задач в таск трекере.<br />Разработка наиболее сложных частей проекта.<br />Создание каркаса, на котором далее продолжали работать бэки."
+  role: PHP Team Leader
+  start: 02.2015
   end: 08.2015
+- name: ARTOX
+  city: Минск
+  link: http://www.artox.com
+  description: Разработка приложений для продуктов компании
+  role: iOS Developer
+  start: 06.2013
+  end: 02.2015
   projects:
     - name: relax.by
       link: https://itunes.apple.com/by/app/relax.by-gid-po-zavedeniam/id568029837?mt=8
-      role: iOS Developer, API Developer
-      description: Каталог заведений и Афиша
+      description: Полный каталог заведений Минска и регионов, поиск ближайших заведений, афиша мероприятий страны, вызов такси
       challenges:
         - Кластеризация заведений на Google Maps
         - Кастомный первый экран, который конфигурируется на стороне сервера
@@ -18,90 +77,35 @@
       technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
     - name: 103.by
       link: https://itunes.apple.com/by/app/103.by-poisk-lekarstv/id702791018?mt=8
-      role: iOS Developer, API Developer
       description: Поиск аптек с лекарствами
       challenges:
         - Анимации при скроле
         - Написание API для приложения
       technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
-
 - name: ARTOX
   city: Минск
   link: http://www.artox.com
-  description: Разработка приложений для сайтов компании
-  role: iOS Developer
-  start: 02.2010
-  end: 08.2015
+  description: Разработка продуктов компании
+  role: PHP Developer
+  start: 02.2011
+  end: 06.2013
   projects:
+    - name: CityPlatform
+      link: http://www.artox.com/city-platform/
+      description: "Создание CRM для городских платформ.<br />Включает в себя модули: Главная страница, Каталог компаний, Каталог товаров, Персональный сайт, Афиша с билетным агрегатором, Фотоотчеты, Скидки, Журнал"
+      challenges:
+        - Написание проекта с нуля на Yii
+        - Построение архитектуры и стурктуры БД
+        - Создание админ-панели с широким функионалом, которая позволяет очень сильно кастомизировать сайт
+        - Классификация товаров - сопоставление товаров от сторонних продавцов с таварами в нашей системе
+        - Интеграция с сервисами СМС и Email рассылок
+      technologies: PHP, MySQL, Yii Framework, RabbitMQ, Redis
     - name: relax.by
-      link: https://itunes.apple.com/by/app/relax.by-gid-po-zavedeniam/id568029837?mt=8
-      role: iOS Developer, API Developer
-      description: Каталог заведений и Афиша
-      challenges:
-        - Кластеризация заведений на Google Maps
-        - Кастомный первый экран, который конфигурируется на стороне сервера
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
+      link: http://relax.by
+      description: "Гид по развлечениям и городской жизни. Сервис по бронированию заведений и услуг.<br />Сделан на <b>CityPlatform</b><br />Уникальных посетителей в сутки: <b>68&nbsp;735</b><br /><br />"
     - name: 103.by
-      link: https://itunes.apple.com/by/app/103.by-poisk-lekarstv/id702791018?mt=8
-      role: iOS Developer, API Developer
-      description: Поиск аптек с лекарствами
-      challenges:
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
-
-- name: ARTOX
-  city: Минск
-  link: http://www.artox.com
-  description: Разработка приложений для сайтов компании
-  role: iOS Developer
-  start: 02.2010
-  end: 08.2015
-  projects:
-    - name: relax.by
-      link: https://itunes.apple.com/by/app/relax.by-gid-po-zavedeniam/id568029837?mt=8
-      role: iOS Developer, API Developer
-      description: Каталог заведений и Афиша
-      challenges:
-        - Кластеризация заведений на Google Maps
-        - Кастомный первый экран, который конфигурируется на стороне сервера
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
-    - name: 103.by
-      link: https://itunes.apple.com/by/app/103.by-poisk-lekarstv/id702791018?mt=8
-      role: iOS Developer, API Developer
-      description: Поиск аптек с лекарствами
-      challenges:
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
-
-- name: ARTOX
-  city: Минск
-  link: http://www.artox.com
-  description: Разработка приложений для сайтов компании
-  role: iOS Developer
-  start: 02.2010
-  end: 08.2015
-  projects:
-    - name: relax.by
-      link: https://itunes.apple.com/by/app/relax.by-gid-po-zavedeniam/id568029837?mt=8
-      role: iOS Developer, API Developer
-      description: Каталог заведений и Афиша
-      challenges:
-        - Кластеризация заведений на Google Maps
-        - Кастомный первый экран, который конфигурируется на стороне сервера
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
-    - name: 103.by
-      link: https://itunes.apple.com/by/app/103.by-poisk-lekarstv/id702791018?mt=8
-      role: iOS Developer, API Developer
-      description: Поиск аптек с лекарствами
-      challenges:
-        - Анимации при скроле
-        - Написание API для приложения
-      technologies: Objective-C, MVVM, ReactiveCocoa, sqlite3, PHP
+      link: http://103.by
+      description: "Портал о здоровье и красоте. Сервис поиска лекарств.<br />Сделан на <b>CityPlatform</b><br />Уникальных посетителей в сутки: <b>88&nbsp;419</b><br /><br />"
+    - name: dom.by
+      link: http://dom.by
+      description: "Сервис по подбору товаров и услуг для дома.<br />Сделан на <b>CityPlatform</b><br />Уникальных посетителей в сутки: <b>27&nbsp;214</b>"
